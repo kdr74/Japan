@@ -1,0 +1,48 @@
+JAPAN TRIP 2026 - FILES STATUS
+===============================
+
+COMPLETED FILES:
+✅ index.html (56KB) - Main planning guide with summary, bookings, transport, tips
+✅ README.md (3KB) - GitHub repository documentation
+
+PENDING FILES (to be created):
+⏳ itinerary.html - Detailed hour-by-hour itinerary for all 17 days
+   - Dropdown day selector
+   - Complete timeline for each day with:
+     * Transport routes and costs
+     * Attraction details with website links
+     * Meal suggestions
+     * Tips and warnings
+     * Daily budget estimates
+   - Estimated size: 120-150KB (comprehensive detail for 17 days)
+
+⏳ financial.html - Interactive expense tracker
+   - Currency toggle (GBP/JPY with auto-conversion)
+   - Dropdown day selector
+   - Add/remove expense rows with:
+     * Item description field
+     * Category dropdown (Transport, Food, Attractions, Shopping, Accommodation, Other)
+     * Amount field
+     * Currency selector per item
+   - Automatic calculations:
+     * Running totals per day
+     * Category summaries
+     * Grand total with remaining budget
+   - Uses browser localStorage to persist data
+   - Estimated size: 40-50KB
+
+STRUCTURE:
+- index.html = Landing page with links to other files
+- itinerary.html = Detailed daily plans (opened in new tab)
+- financial.html = Expense tracking (opened in new tab)
+
+All three files work independently and can be used offline once downloaded.
+
+GITHUB REPOSITORY SETUP:
+1. Create new repository: japan-trip-2026
+2. Upload: index.html, itinerary.html, financial.html, README.md
+3. Enable GitHub Pages (Settings > Pages > Deploy from main branch)
+4. Access via: https://[username].github.io/japan-trip-2026/
+
+The index.html links to itinerary.html and financial.html using relative paths,
+so everything will work both locally and on GitHub Pages.
