@@ -101,7 +101,13 @@
                         <tr><td>Dep</td><td>19 Apr (Sun)</td><td>Flight</td><td>BA0008 Haneda 08:50 → LHR 15:40</td></tr>
                     </table>
 
-                    <h2>Budget Summary</h2>
+                   <h2>Budget Summary</h2>
+                    <div style="margin-bottom: 1rem;">
+                        <button id="budget-toggle-btn" onclick="toggleBudget()" style="background: #667eea; color: white; padding: 0.8rem 1.5rem; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; transition: all 0.3s;">
+                            🔒 Show Budget Details
+                        </button>
+                    </div>
+                    <div id="budget-section" style="display: none;">
                     <table>
                         <tr><th>Item</th><th>Cost (GBP)</th><th>Status</th></tr>
                         <tr><td><strong>Flights inc. seats (BA0007/BA0008)</strong></td><td><strong>£8,760</strong></td><td>✅ Paid (2024+2025+2025)</td></tr>
@@ -149,8 +155,9 @@
                             <li><strong>JR Pass (BEFORE ARRIVAL):</strong> Buy 7-day pass for all 5 people. Receive Exchange Order, activate on 11 April at Kyoto Station.</li>
                             <li><strong>Universal Studios Japan (January 2026):</strong> 1-Day Pass + Express Pass 7 for 5 people. Date: 13 April. Website: usj.co.jp/web/en/us</li>
                             <li><strong>teamLab Borderless (February 2026):</strong> Tickets for 5 people, 10:30 slot. Date: 6 April. Website: borderless.teamlab.art</li>
-                        </ol>
+                      </ol>
                     </div>
+                    </div> <!-- Close budget-section div -->
                 </div>
             </div>
 
@@ -438,6 +445,44 @@
             document.getElementById(tabId).classList.add('active');
             event.target.classList.add('active');
             window.scrollTo(0, 0);
+        }
+    </script>
+<script>
+        let budgetUnlocked = false;
+
+        function toggleBudget() {
+            if (!budgetUnlocked) {
+                const password = prompt('Enter password to view budget:');
+                if (password === '07977') {
+                    budgetUnlocked = true;
+                    document.getElementById('budget-section').style.display = 'block';
+                    document.getElementById('budget-toggle-btn').textContent = '🔓 Hide Budget Details';
+                    document.getElementById('budget-toggle-btn').style.background = '#28a745';
+                } else if (password !== null) {
+                    alert('Incorrect password');
+                }
+            } else {
+                budgetUnlocked = false;
+                document.getElementById('budget-section').style.display = 'none';
+                document.getElementById('budget-toggle-btn').textContent = '🔒 Show Budget Details';
+                document.getElementById('budget-toggle-btn').style.background = '#667eea';
+            }
+        }
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
         }
     </script>
 </body>
