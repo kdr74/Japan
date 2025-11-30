@@ -44,9 +44,10 @@
         <div class="content">
             <div class="section">
                 <label for="day-selector"><strong>Select Day:</strong></label>
-                <select id="day-selector" onchange="showDay(this.value)">
+               <select id="day-selector" onchange="showDay(this.value)">
                     <option value="overview">Overview - All Days Summary</option>
-                    <option value="day-pre">Pre-Trip: 3 Apr (Fri)</option>
+                    <option value="day-checkin">✈️ Check-In Opens: 3 Apr 09:20</option>
+                    <option value="day-pre">Pre-Trip: 3 Apr (Fri) - Heathrow Hotel</option>
                     <option value="day01">Day 1: 4 Apr (Sat)</option>
                     <option value="day02">Day 2: 5 Apr (Sun)</option>
                     <option value="day03">Day 3: 6 Apr (Mon)</option>
@@ -128,7 +129,100 @@
                 <!-- Each day follows with complete detail... -->
                 <!-- Due to character limits in this response, I'll create the file with placeholder structure -->
                 <!-- The actual file will be generated with all days fully populated -->
+<!-- FLIGHT CHECK-IN DAY -->
+<div id="day-checkin" class="day-detail">
+    <h2>Check-In Opens: Thursday 3 April 2026</h2>
+    <p><strong>BA Flight Check-In Available (24 hours before departure)</strong></p>
+    
+    <div class="warning-box">
+        <h4>⚠️ CRITICAL: Check In Online from 09:20 on 3 April</h4>
+        <p><strong>Booking Reference:</strong> URT99G</p>
+        <p><strong>Check-in opens:</strong> Exactly 24 hours before departure (09:20, 3 April 2026)</p>
+    </div>
 
+    <div class="timeline">
+        <div class="timeline-item">
+            <h4>09:20 - Online Check-In Opens<span class="cost-badge">Free</span></h4>
+            <p><strong>BA Website/App:</strong> <a href="https://www.britishairways.com" target="_blank" class="attraction-link">britishairways.com →</a></p>
+            <p><strong>Booking ref:</strong> URT99G</p>
+            <p><strong>What to do:</strong></p>
+            <ol>
+                <li>Go to BA website or app</li>
+                <li>Enter booking reference URT99G</li>
+                <li>Check in all 5 passengers</li>
+                <li>Select seats (if not already selected)</li>
+                <li>Download/save boarding passes to phone</li>
+                <li>Print boarding passes as backup (recommended)</li>
+            </ol>
+            <div class="info-box">
+                <strong>Flight Details - Check Carefully:</strong>
+                <ul>
+                    <li><strong>Outbound:</strong> BA0007, 04 Apr 09:20, Heathrow T5 → Haneda T3</li>
+                    <li><strong>Return:</strong> BA0008, 19 Apr 08:50, Haneda T3 → Heathrow T5</li>
+                    <li><strong>Aircraft:</strong> Airbus A350</li>
+                    <li><strong>Class:</strong> World Traveller (Economy)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Luggage Allowance - Check Weights<span class="cost-badge">Included</span></h4>
+            <p><strong>Per person:</strong></p>
+            <ul>
+                <li><strong>Checked bags:</strong> 2 × 23kg each (10 bags total for family)</li>
+                <li><strong>Cabin bag:</strong> 1 × 56×45×25cm (fits in overhead locker)</li>
+                <li><strong>Personal item:</strong> 1 × 40×30×15cm (handbag/laptop, under seat)</li>
+            </ul>
+            <p><strong>Total checked luggage allowance: 230kg (10 × 23kg)</strong></p>
+            <div class="tip-box">
+                <strong>Packing tip:</strong> Weigh bags before leaving home. Overweight fees are expensive! Spread weight across all 10 bags if needed.
+            </div>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Seat Selection<span class="cost-badge">Free in Economy</span></h4>
+            <p><strong>Recommended seating:</strong></p>
+            <ul>
+                <li>Try to get seats together (5 seats across or 3+2 configuration)</li>
+                <li>Aisle seats for easy bathroom access on long flight</li>
+                <li>Avoid seats near toilets/galleys (noisy)</li>
+                <li>Exit row seats = extra legroom (but can't store bags for takeoff/landing)</li>
+            </ul>
+            <p><strong>A350 layout:</strong> Usually 3-3-3 configuration in Economy</p>
+        </div>
+
+        <div class="timeline-item">
+            <h4>Final Flight Prep</h4>
+            <p><strong>Documents checklist:</strong></p>
+            <ul>
+                <li>✅ Passports (valid, names match booking exactly)</li>
+                <li>✅ Boarding passes (digital + printed backup)</li>
+                <li>✅ Booking confirmation (URT99G)</li>
+                <li>✅ Hotel confirmations for immigration</li>
+                <li>✅ Return flight details (for Japan immigration)</li>
+            </ul>
+            <p><strong>Pre-flight tasks:</strong></p>
+            <ul>
+                <li>Notify bank/credit cards of Japan travel</li>
+                <li>Check passport expiry (must be valid for entire trip)</li>
+                <li>Download offline maps, entertainment for flight</li>
+                <li>Pack medications in hand luggage</li>
+                <li>Charge all devices fully</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <h4>Flight Cost Breakdown (PAID):</h4>
+        <ul>
+            <li>Total: £8,296.20 for 5 passengers return</li>
+            <li>Payment 1: £6,039.25 (2024)</li>
+            <li>Payment 2: £2,256.95 (2025)</li>
+            <li>Includes: 2×23kg bags + cabin bag per person</li>
+            <li>Includes: Meals and drinks on both flights</li>
+        </ul>
+    </div>
+</div>
 <!-- DAY PRE-TRIP -->
 <div id="day-pre" class="day-detail">
     <h2>Pre-Trip: Friday 3 April 2026</h2>
@@ -212,10 +306,15 @@
         </div>
 
         <div class="timeline-item">
-            <h4>09:20 - Departure</h4>
-            <p><strong>Flight:</strong> BA0007 London Heathrow → Tokyo Haneda</p>
-            <p><strong>Duration:</strong> 11 hours 45 minutes</p>
-            <p><strong>Arrival:</strong> 07:05+1 (Sunday 5 April, Japan time)</p>
+            <h4>09:20 - Departure<span class="cost-badge">£8,296 PAID</span></h4>
+                <p><strong>Flight:</strong> BA0007 London Heathrow T5 → Tokyo Haneda T3</p>
+                <p><strong>Aircraft:</strong> Airbus A350 (World Traveller/Economy)</p>
+                <p><strong>Duration:</strong> 13 hours 40 minutes</p>
+                <p><strong>Arrival:</strong> 07:00+1 (Sunday 5 April, Japan time)</p>
+                <p><strong>Booking:</strong> URT99G</p>
+                <div class="info-box">
+    <strong>Checked luggage:</strong> 10 bags total (2 per person × 5) already checked in. Collect at Haneda arrivals.
+</div>
         </div>
     </div>
 
@@ -1995,8 +2094,11 @@
 
     <div class="timeline">
         <div class="timeline-item">
-            <h4>05:00 - Wake Up<span class="cost-badge">Free</span></h4>
-            <p>Multiple alarms! Quick shower and final preparations.</p>
+           <h4>04:30 - Wake Up<span class="cost-badge">Free</span></h4>
+        <p>Multiple alarms! Flight is 08:50 (earlier than expected). Must leave hotel by 05:45 latest.</p>
+        <div class="warning-box">
+    <strong>CRITICAL:</strong> Departure is 08:50, NOT 09:20. Need to be at airport by 06:00 for international check-in.
+</div>
         </div>
 
         <div class="timeline-item">
@@ -2049,12 +2151,15 @@
         </div>
 
         <div class="timeline-item">
-            <h4>09:20 - Departure<span class="cost-badge">Free</span></h4>
-            <p><strong>Flight:</strong> BA0008 Tokyo Haneda → London Heathrow</p>
-            <p><strong>Duration:</strong> 12 hours 35 minutes</p>
-            <p><strong>Arrival:</strong> 15:40 SAME DAY (19 April, UK time)</p>
-            <div class="info-box">
-                You gain the 9-hour time difference back! Leave 09:20 Japan time, arrive 15:40 UK time same day.
+            <h4>08:50 - Departure<span class="cost-badge">£8,296 PAID</span></h4>
+                <p><strong>Flight:</strong> BA0008 Tokyo Haneda T3 → London Heathrow T5</p>
+                <p><strong>Aircraft:</strong> Airbus A350 (World Traveller/Economy)</p>
+                <p><strong>Duration:</strong> 14 hours 50 minutes</p>
+                <p><strong>Arrival:</strong> 15:40 SAME DAY (19 April, UK time)</p>
+                <p><strong>Booking:</strong> URT99G</p>
+                <div class="warning-box">
+    <strong>Note:</strong> Departure time is 08:50 (NOT 09:20). Must be at airport by 06:00 latest!
+</div>
             </div>
         </div>
 
