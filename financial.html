@@ -97,17 +97,17 @@
                     <h3>Overall Financial Summary</h3>
                     
                     <div class="summary-cards">
-                        <div class="summary-card">
+<div class="summary-card">
                             <h4>Total Spent</h4>
-                            <p class="amount" id="grand-total-display">£14,657.44</p>
+                            <p class="amount" id="grand-total-display">£15,121.44</p>
                         </div>
                         <div class="summary-card">
                             <h4>Budget Remaining</h4>
-                            <p class="amount" id="budget-remaining">£3,638.76</p>
+                            <p class="amount" id="budget-remaining">£4,878.56</p>
                         </div>
                         <div class="summary-card">
                             <h4>Flights</h4>
-                            <p class="amount" id="cat-flights">£8,296.20</p>
+                            <p class="amount" id="cat-flights">£8,760.20</p>
                         </div>
                         <div class="summary-card">
                             <h4>Accommodation</h4>
@@ -138,13 +138,15 @@
                     <div class="info-box">
                         <h4>Pre-Paid Items (Already Included):</h4>
                         <ul>
-                            <li>✅ <strong>Flights:</strong> £8,296.20 (BA0007/BA0008)
+                           <li>✅ <strong>Flights:</strong> £8,760.20 (BA0007/BA0008)
                                 <ul style="font-size: 0.9rem; margin-top: 0.3rem;">
-                                    <li>Paid £6,039.25 (2024) + £2,256.95 (2025)</li>
+                                    <li>Base tickets: £6,039.25 (2024) + £2,256.95 (2025) = £8,296.20</li>
+                                    <li>Seat selection: £464 (30 Nov 2025) - all seats confirmed</li>
                                     <li>Booking: URT99G | Check-in opens: 3 April 2026 at 09:20</li>
                                     <li>Outbound: BA0007 LHR T5→HND T3, 04 Apr 09:20 (13h 40m)</li>
                                     <li>Return: BA0008 HND T3→LHR T5, 19 Apr 08:50 (14h 50m)</li>
                                     <li>World Traveller: 2×23kg bags + cabin bag per person</li>
+                                    <li><strong>Seats:</strong> Row 45 - Martha (45A), Alice (45B), Ben (45C), Claire (45D), Kieron (45E)</li>
                                 </ul>
                             </li>
                             <li>✅ <strong>Accommodation:</strong> £6,361.24 (paid 29 Nov 2025)</li>
@@ -154,14 +156,14 @@
                         </ul>
                     </div>
 
-                    <div class="warning-box">
+                <div class="warning-box">
                         <h4>Budget Summary:</h4>
                         <ul>
-                            <li><strong>Total budget:</strong> £18,296.20</li>
-                            <li><strong>Pre-paid:</strong> £14,657.44 (flights + accommodation)</li>
-                            <li><strong>Remaining to spend:</strong> £3,638.76</li>
+                            <li><strong>Total budget:</strong> £20,000</li>
+                            <li><strong>Pre-paid:</strong> £15,121.44 (flights + accommodation)</li>
+                            <li><strong>Remaining to spend:</strong> £4,878.56</li>
                             <li><strong>Major bookings needed:</strong> £1,770-2,195 (JR Pass, USJ, teamLab)</li>
-                            <li><strong>Daily expenses budget:</strong> £1,443-1,868</li>
+                            <li><strong>Daily expenses budget:</strong> £2,683-3,108</li>
                         </ul>
                     </div>
 
@@ -172,7 +174,7 @@
                             <li>Toggle between GBP (£) and JPY (¥) display</li>
                             <li>Data saves automatically in your browser</li>
                             <li>Use Export button to download your data</li>
-                            <li>Budget target: £18,296 total (updated to include flights)</li>
+                           <li>Budget target: £20,000 total (includes flights with seat selection)</li>
                         </ul>
                     </div>
                 </div>
@@ -637,10 +639,10 @@
             days.forEach(day => calculateTotal(day));
         }
 
-        function updateGrandTotal() {
-            let grandTotal = 14657.44; // Pre-paid flights (£8,296.20) + accommodation (£6,361.24)
+       function updateGrandTotal() {
+            let grandTotal = 15121.44; // Pre-paid flights (£8,760.20) + accommodation (£6,361.24)
             const categories = {
-                flights: 8296.20,
+                flights: 8760.20,
                 accommodation: 6361.24,
                 transport: 0,
                 food: 0,
@@ -671,7 +673,7 @@
             document.getElementById('grand-total-display').textContent = 
                 `${symbol}${(grandTotal * rate).toFixed(2)}`;
             document.getElementById('budget-remaining').textContent = 
-                `${symbol}${((18296.20 - grandTotal) * rate).toFixed(2)}`;
+                `${symbol}${((20000 - grandTotal) * rate).toFixed(2)}`;
             
             Object.keys(categories).forEach(cat => {
                 const el = document.getElementById(`cat-${cat}`);
