@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Tracker - Japan Trip 2026</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; min-height: 100vh; }
+        header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2rem; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); position: relative; }
+        header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .back-link { position: absolute; top: 2rem; left: 2rem; color: white; text-decoration: none; padding: 0.5rem 1rem; background: rgba(255,255,255,0.2); border-radius: 4px; transition: all 0.3s; }
+        .back-link:hover { background: rgba(255,255,255,0.3); }
+        .content { padding: 2rem; }
+        .section { background: #f8f9fa; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .section h2 { color: #667eea; margin-bottom: 1rem; border-bottom: 3px solid #667eea; padding-bottom: 0.5rem; }
+        select, input[type="text"], input[type="number"] { padding: 0.6rem; font-size: 0.95rem; border: 2px solid #667eea; border-radius: 4px; background: white; }
+        select { cursor: pointer; width: 100%; max-width: 500px; margin-bottom: 1.5rem; }
+        .day-detail { display: none; }
+        .day-detail.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .currency-toggle { display: inline-flex; background: #2d3748; border-radius: 4px; overflow: hidden; margin-bottom: 1.5rem; }
+        .currency-btn { background: transparent; color: white; border: none; padding: 0.6rem 1.2rem; cursor: pointer; font-size: 1rem; transition: all 0.3s; }
+        .currency-btn.active { background: #667eea; }
+        .expense-table { margin-top: 1.5rem; }
+        .expense-header { display: grid; grid-template-columns: 2.5fr 1.5fr 1.2fr 1fr 0.5fr; gap: 0.5rem; margin-bottom: 0.8rem; font-weight: 600; padding: 0.5rem; background: #667eea; color: white; border-radius: 4px; }
+        .expense-row { display: grid; grid-template-columns: 2.5fr 1.5fr 1.2fr 1fr 0.5fr; gap: 0.5rem; margin-bottom: 0.5rem; align-items: center; }
+        .expense-row input, .expense-row select { margin-bottom: 0; width: 100%; }
+        .delete-btn { background: #dc3545; color: white; border: none; padding: 0.6rem; border-radius: 4px; cursor: pointer; font-size: 1.1rem; transition: all 0.3s; }
+        .delete-btn:hover { background: #c82333; }
+        .add-expense-btn { background: #28a745; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 4px; cursor: pointer; margin-top: 1rem; font-size: 1rem; transition: all 0.3s; }
+        .add-expense-btn:hover { background: #218838; transform: translateY(-1px); }
+        .total-box { background: #667eea; color: white; padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem; box-shadow: 0 4px 8px rgba(102,126,234,0.3); }
+        .total-box h3 { color: white; margin: 0 0 0.5rem 0; font-size: 1.5rem; }
+        .summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .summary-card { background: white; padding: 1.2rem; border-radius: 8px; border-left: 4px solid #667eea; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .summary-card h4 { color: #667eea; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .summary-card .amount { font-size: 1.5rem; font-weight: bold; color: #2d3748; }
+        .controls { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .control-btn { padding: 0.7rem 1.2rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.95rem; transition: all 0.3s; }
+        .save-btn { background: #667eea; color: white; }
+        .save-btn:hover { background: #5568d3; }
+        .clear-btn { background: #dc3545; color: white; }
+        .clear-btn:hover { background: #c82333; }
+        .export-btn { background: #17a2b8; color: white; }
+        .export-btn:hover { background: #138496; }
+        .info-box { background: #e6f3ff; border-left: 4px solid #667eea; padding: 1rem; margin: 1rem 0; border-radius: 4px; }
+        .warning-box { background: #fff3cd; border-left: 4px solid #fbbf24; padding: 1rem; margin: 1rem 0; border-radius: 4px; }
+        @media (max-width: 768px) {
+            .expense-header, .expense-row { grid-template-columns: 1fr; }
+            .expense-row { background: #f8f9fa; padding: 0.5rem; border-radius: 4px; margin-bottom: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="index.html" class="back-link">← Back to Main</a>
+            <h1>💰 Financial Tracker</h1>
+            <p>Track Trip Expenses with Currency Conversion</p>
+        </header>
+
+        <div class="content">
+            <div class="section">
+                <h2>Expense Tracking</h2>
+                
+                <div class="currency-toggle">
+                    <button class="currency-btn active" onclick="setCurrency('GBP')" id="gbp-btn">£ GBP</button>
+                    <button class="currency-btn" onclick="setCurrency('JPY')" id="jpy-btn">¥ JPY</button>
+                </div>
+
+                <label for="day-selector"><strong>Select Day:</strong></label>
+                <select id="day-selector" onchange="showDay(this.value)">
+                    <option value="summary">Overall Summary</option>
+                    <option value="pre">Pre-Trip: 3 Apr</option>
+                    <option value="day01">Day 1: 4 Apr</option>
+                    <option value="day02">Day 2: 5 Apr</option>
+                    <option value="day03">Day 3: 6 Apr</option>
+                    <option value="day04">Day 4: 7 Apr</option>
+                    <option value="day05">Day 5: 8 Apr</option>
+                    <option value="day06">Day 6: 9 Apr</option>
+                    <option value="day07">Day 7: 10 Apr</option>
+                    <option value="day08">Day 8: 11 Apr</option>
+                    <option value="day09">Day 9: 12 Apr</option>
+                    <option value="day10">Day 10: 13 Apr</option>
+                    <option value="day11">Day 11: 14 Apr</option>
+                    <option value="day12">Day 12: 15 Apr</option>
+                    <option value="day13">Day 13: 16 Apr</option>
+                    <option value="day14">Day 14: 17 Apr</option>
+                    <option value="day15">Day 15: 18 Apr</option>
+                    <option value="dep">Departure: 19 Apr</option>
+                </select>
+
+                <!-- SUMMARY VIEW -->
+                <div id="summary" class="day-detail active">
+                    <h3>Overall Financial Summary</h3>
+                    
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <h4>Total Spent</h4>
+                            <p class="amount" id="grand-total-display">£6,361.24</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Budget Remaining</h4>
+                            <p class="amount" id="budget-remaining">£3,638.76</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Accommodation</h4>
+                            <p class="amount" id="cat-accommodation">£6,361.24</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Transport</h4>
+                            <p class="amount" id="cat-transport">£0.00</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Food & Drink</h4>
+                            <p class="amount" id="cat-food">£0.00</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Attractions</h4>
+                            <p class="amount" id="cat-attraction">£0.00</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Shopping</h4>
+                            <p class="amount" id="cat-shopping">£0.00</p>
+                        </div>
+                        <div class="summary-card">
+                            <h4>Other</h4>
+                            <p class="amount" id="cat-other">£0.00</p>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h4>Pre-Paid Items (Already Included):</h4>
+                        <ul>
+                            <li>✅ All accommodation: £6,361.24 (paid 29 Nov 2025)</li>
+                            <li>⚠️ JR Pass (to buy): £1,140-1,320</li>
+                            <li>⚠️ Universal Studios (to book): £510-725</li>
+                            <li>⚠️ teamLab Borderless (to book): £120-150</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>Instructions:</h4>
+                        <ul>
+                            <li>Select a specific day from dropdown to add expenses</li>
+                            <li>Toggle between GBP (£) and JPY (¥) display</li>
+                            <li>Data saves automatically in your browser</li>
+                            <li>Use Export button to download your data</li>
+                            <li>Budget target: £10,000 total</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- TEMPLATE FOR EACH DAY -->
+                <div id="pre" class="day-detail">
+                    <h3>Pre-Trip: Friday 3 April</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-pre"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('pre')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-pre">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Travel to Heathrow £30-150, Dinner £50-80</p>
+                    </div>
+                </div>
+
+                <div id="day01" class="day-detail">
+                    <h3>Day 1: Saturday 4 April - Flight</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day01"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day01')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day01">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Minimal (in-flight only)</p>
+                    </div>
+                </div>
+
+                <div id="day02" class="day-detail">
+                    <h3>Day 2: Sunday 5 April - Arrive Tokyo</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day02"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day02')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day02">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> IC cards £60-90, Transport £20-25, Lunch £30-50, Dinner £50-80 = £160-245</p>
+                    </div>
+                </div>
+
+                <div id="day03" class="day-detail">
+                    <h3>Day 3: Monday 6 April - teamLab & Odaiba</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day03"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day03')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day03">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> teamLab £120-150 (pre-paid), Transport £30-40, Lunch £40-60, Dinner £50-80 = £240-330</p>
+                    </div>
+                </div>
+
+                <div id="day04" class="day-detail">
+                    <h3>Day 4: Tuesday 7 April - Akihabara, Shibuya, Harajuku</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day04"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day04')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day04">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Shopping £50-150, Transport £10-15, Meals £90-140 = £150-305</p>
+                    </div>
+                </div>
+
+                <div id="day05" class="day-detail">
+                    <h3>Day 5: Wednesday 8 April - Imperial Palace, Ginza, Tokyo Tower</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day05"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day05')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day05">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Tokyo Tower £30-40, Transport £10-15, Meals £90-130, Luggage forwarding £50-70 = £180-255</p>
+                    </div>
+                </div>
+
+                <div id="day06" class="day-detail">
+                    <h3>Day 6: Thursday 9 April - Travel to Mt Fuji</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day06"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day06')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day06">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Highway bus £75-100, Meals £80-120 = £155-220</p>
+                    </div>
+                </div>
+
+                <div id="day07" class="day-detail">
+                    <h3>Day 7: Friday 10 April - Mt Fuji Full Day</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day07"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day07')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day07">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Ropeway £15-20, Local transport £20-30, Meals £80-120, Onsen £30-50 = £145-220</p>
+                    </div>
+                </div>
+
+                <div id="day08" class="day-detail">
+                    <h3>Day 8: Saturday 11 April - Travel to Kyoto</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day08"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day08')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day08">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> JR Pass covers transport, Bus £20-30, Meals £90-130 = £110-160</p>
+                        <p><strong>⚠️ ACTIVATE JR PASS TODAY at Kyoto Station</strong></p>
+                    </div>
+                </div>
+
+                <div id="day09" class="day-detail">
+                    <h3>Day 9: Sunday 12 April - Kyoto Temples</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day09"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day09')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day09">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Temple fees £15-25, Local transport £15-20, Meals £90-130 = £120-175</p>
+                    </div>
+                </div>
+
+                <div id="day10" class="day-detail">
+                    <h3>Day 10: Monday 13 April - Universal Studios Japan</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day10"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day10')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day10">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> USJ tickets £510-725 (pre-paid), Park food £80-120, Shopping £50-100 = £130-220</p>
+                        <p><strong>Note:</strong> Biggest expense day - but tickets pre-paid</p>
+                    </div>
+                </div>
+
+                <div id="day11" class="day-detail">
+                    <h3>Day 11: Tuesday 14 April - Kiyomizu-dera</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day11"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day11')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day11">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Temple fees £10-20, Local transport £10-15, Meals £90-130 = £110-165</p>
+                    </div>
+                </div>
+
+                <div id="day12" class="day-detail">
+                    <h3>Day 12: Wednesday 15 April - Arashiyama</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day12"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day12')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day12">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Monkey Park £5, Temple fees £10-15, Local transport £10-15, Meals £90-130 = £115-165</p>
+                    </div>
+                </div>
+
+                <div id="day13" class="day-detail">
+                    <h3>Day 13: Thursday 16 April - Nara Day Trip</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day13"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day13')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day13">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> JR Pass covers transport, Deer crackers £5-10, Temple fees £10-15, Meals £90-130 = £105-155</p>
+                    </div>
+                </div>
+
+                <div id="day14" class="day-detail">
+                    <h3>Day 14: Friday 17 April - Three Cities Tour</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day14"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day14')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day14">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> JR Pass covers Shinkansen, Himeji Castle £7, Kobe beef lunch £80-120, Dinner £60-90 = £147-217</p>
+                        <p><strong>Note:</strong> Long day 08:30-22:00, budget for 3 cities</p>
+                    </div>
+                </div>
+
+                <div id="day15" class="day-detail">
+                    <h3>Day 15: Saturday 18 April - Return to Tokyo</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-day15"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('day15')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-day15">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> JR Pass covers Shinkansen (last day of validity), Airport transport £10-15, Meals £60-90 = £70-105</p>
+                    </div>
+                </div>
+
+                <div id="dep" class="day-detail">
+                    <h3>Departure: Sunday 19 April - Flight Home</h3>
+                    <div class="expense-table">
+                        <div class="expense-header">
+                            <div>Description</div>
+                            <div>Category</div>
+                            <div>Amount</div>
+                            <div>Currency</div>
+                            <div></div>
+                        </div>
+                        <div id="expenses-dep"></div>
+                    </div>
+                    <button class="add-expense-btn" onclick="addExpense('dep')">+ Add Expense</button>
+                    <div class="total-box">
+                        <h3>Day Total: <span id="total-dep">£0.00</span></h3>
+                    </div>
+                    <div class="info-box">
+                        <p><strong>Expected costs:</strong> Minimal (breakfast, snacks)</p>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn save-btn" onclick="saveData()">💾 Save All Data</button>
+                    <button class="control-btn export-btn" onclick="exportData()">📥 Export to CSV</button>
+                    <button class="control-btn clear-btn" onclick="clearAllData()">🗑️ Clear All Data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentCurrency = 'GBP';
+        const exchangeRate = 190; // £1 = ¥190
+        const days = ['pre', 'day01', 'day02', 'day03', 'day04', 'day05', 'day06', 'day07', 
+                      'day08', 'day09', 'day10', 'day11', 'day12', 'day13', 'day14', 'day15', 'dep'];
+
+        // Load data from localStorage on page load
+        window.onload = function() {
+            loadData();
+            updateAllTotals();
+        };
+
+        function setCurrency(currency) {
+            currentCurrency = currency;
+            document.getElementById('gbp-btn').classList.toggle('active', currency === 'GBP');
+            document.getElementById('jpy-btn').classList.toggle('active', currency === 'JPY');
+            updateAllTotals();
+        }
+
+        function showDay(dayId) {
+            document.querySelectorAll('.day-detail').forEach(detail => {
+                detail.classList.remove('active');
+            });
+            document.getElementById(dayId).classList.add('active');
+        }
+
+        function addExpense(day) {
+            const container = document.getElementById(`expenses-${day}`);
+            const rowId = `expense-${day}-${Date.now()}`;
+            
+            const row = document.createElement('div');
+            row.className = 'expense-row';
+            row.id = rowId;
+            row.innerHTML = `
+                <input type="text" placeholder="Item description" onchange="calculateTotal('${day}')">
+                <select onchange="calculateTotal('${day}')">
+                    <option value="food">Eating & Drinking</option>
+                    <option value="attraction">Attraction</option>
+                    <option value="transport">Transport</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="accommodation">Accommodation</option>
+                    <option value="other">Other</option>
+                </select>
+                <input type="number" step="0.01" placeholder="0.00" onchange="calculateTotal('${day}')">
+                <select onchange="calculateTotal('${day}')">
+                    <option value="GBP">GBP £</option>
+                    <option value="JPY">JPY ¥</option>
+                </select>
+                <button class="delete-btn" onclick="deleteExpense('${rowId}', '${day}')">×</button>
+            `;
+            
+            container.appendChild(row);
+            saveData();
+        }
+
+        function deleteExpense(rowId, day) {
+            if (confirm('Delete this expense?')) {
+                document.getElementById(rowId).remove();
+                calculateTotal(day);
+                saveData();
+            }
+        }
+
+        function calculateTotal(day) {
+            const container = document.getElementById(`expenses-${day}`);
+            if (!container) return;
+            
+            const rows = container.querySelectorAll('.expense-row');
+            let total = 0;
+            
+            rows.forEach(row => {
+                const amount = parseFloat(row.querySelector('input[type="number"]').value) || 0;
+                const currency = row.querySelectorAll('select')[1].value;
+                const amountGBP = currency === 'JPY' ? amount / exchangeRate : amount;
+                total += amountGBP;
+            });
+            
+            const displayAmount = currentCurrency === 'JPY' ? total * exchangeRate : total;
+            const symbol = currentCurrency === 'JPY' ? '¥' : '£';
+            document.getElementById(`total-${day}`).textContent = 
+                `${symbol}${displayAmount.toFixed(2)}`;
+            
+            updateGrandTotal();
+            saveData();
+        }
+
+        function updateAllTotals() {
+            days.forEach(day => calculateTotal(day));
+        }
+
+        function updateGrandTotal() {
+            let grandTotal = 6361.24; // Pre-paid accommodation
+            const categories = {
+                accommodation: 6361.24,
+                transport: 0,
+                food: 0,
+                attraction: 0,
+                shopping: 0,
+                other: 0
+            };
+            
+            days.forEach(day => {
+                const container = document.getElementById(`expenses-${day}`);
+                if (!container) return;
+                
+                const rows = container.querySelectorAll('.expense-row');
+                rows.forEach(row => {
+                    const amount = parseFloat(row.querySelector('input[type="number"]').value) || 0;
+                    const currency = row.querySelectorAll('select')[1].value;
+                    const category = row.querySelector('select').value;
+                    const amountGBP = currency === 'JPY' ? amount / exchangeRate : amount;
+                    
+                    grandTotal += amountGBP;
+                    categories[category] = (categories[category] || 0) + amountGBP;
+                });
+            });
+            
+            const symbol = currentCurrency === 'JPY' ? '¥' : '£';
+            const rate = currentCurrency === 'JPY' ? exchangeRate : 1;
+            
+            document.getElementById('grand-total-display').textContent = 
+                `${symbol}${(grandTotal * rate).toFixed(2)}`;
+            document.getElementById('budget-remaining').textContent = 
+                `${symbol}${((10000 - grandTotal) * rate).toFixed(2)}`;
+            
+            Object.keys(categories).forEach(cat => {
+                const el = document.getElementById(`cat-${cat}`);
+                if (el) {
+                    el.textContent = `${symbol}${(categories[cat] * rate).toFixed(2)}`;
+                }
+            });
+        }
+
+        function saveData() {
+            const data = {};
+            days.forEach(day => {
+                const container = document.getElementById(`expenses-${day}`);
+                if (!container) return;
+                
+                const rows = container.querySelectorAll('.expense-row');
+                data[day] = [];
+                
+                rows.forEach(row => {
+                    data[day].push({
+                        description: row.querySelector('input[type="text"]').value,
+                        category: row.querySelector('select').value,
+                        amount: row.querySelector('input[type="number"]').value,
+                        currency: row.querySelectorAll('select')[1].value
+                    });
+                });
+            });
+            
+            localStorage.setItem('japanTripExpenses', JSON.stringify(data));
+        }
+
+        function loadData() {
+            const saved = localStorage.getItem('japanTripExpenses');
+            if (!saved) return;
+            
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(day => {
+                data[day].forEach(expense => {
+                    addExpense(day);
+                    const container = document.getElementById(`expenses-${day}`);
+                    const lastRow = container.lastElementChild;
+                    lastRow.querySelector('input[type="text"]').value = expense.description;
+                    lastRow.querySelector('select').value = expense.category;
+                    lastRow.querySelector('input[type="number"]').value = expense.amount;
+                    lastRow.querySelectorAll('select')[1].value = expense.currency;
+                });
+            });
+        }
+
+        function exportData() {
+            let csv = 'Day,Description,Category,Amount,Currency\n';
+            
+            days.forEach(day => {
+                const container = document.getElementById(`expenses-${day}`);
+                if (!container) return;
+                
+                const rows = container.querySelectorAll('.expense-row');
+                rows.forEach(row => {
+                    const desc = row.querySelector('input[type="text"]').value;
+                    const cat = row.querySelector('select').value;
+                    const amount = row.querySelector('input[type="number"]').value;
+                    const curr = row.querySelectorAll('select')[1].value;
+                    csv += `${day},"${desc}",${cat},${amount},${curr}\n`;
+                });
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'japan-trip-expenses.csv';
+            a.click();
+        }
+
+        function clearAllData() {
+            if (confirm('Clear ALL expense data? This cannot be undone!')) {
+                localStorage.removeItem('japanTripExpenses');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
